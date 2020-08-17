@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://devSoc:devSoc4*@devsoc-api.yvobk.mongodb.net/devSoc-api?retryWrites=true&w=majority",
+  "jwtToken": "secretforJWT"
+}
