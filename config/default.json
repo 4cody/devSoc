@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://devSoc:devSoc4*@devsoc-api.yvobk.mongodb.net/devSoc-api?retryWrites=true&w=majority",
-  "jwtToken": "secretforJWT"
+  "jwtToken": "secretforJWT",
+  "githubClientId": "65e91c054e4a5a0c2df8",
+  "githubSecret": "74de2366e499fe9e2fd3c8bf58b7f94b8762966b"
 }
