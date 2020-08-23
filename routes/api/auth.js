@@ -1,17 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const auth = require('../../middleware/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
-const auth = require('../../middleware/auth');
+
 const User = require('../../models/User');
 
-// @route   GET api/auth
-// @desc    Test route
-// @access  Public
+// @route    GET api/auth
+// @desc     Get user by token
+// @access   Private
 router.get('/', auth, async (req, res) => {
+  console.log('req in get');
+  console.log(req.body);
   try {
+    console.log('in get route ');
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
@@ -20,14 +24,14 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// @route   POST api/auth
-// @desc    Authenticate user & get token
-// @access  Public
+// @route    POST api/auth
+// @desc     Authenticate user & get token
+// @access   Public
 router.post(
   '/',
   [
     check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Please is required').exists(),
+    check('password', 'Password is required').exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -62,8 +66,8 @@ router.post(
 
       jwt.sign(
         payload,
-        config.get('jwtToken'),
-        { expiresIn: 36000 },
+        config.get('jwtSecret'),
+        { expiresIn: '2 days' },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
@@ -71,7 +75,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error');
+      res.status(500).send('Server error');
     }
   }
 );

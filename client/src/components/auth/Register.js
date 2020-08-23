@@ -23,11 +23,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      register({
-        name,
-        email,
-        password,
-      });
+      register({ name, email, password });
     }
   };
 
@@ -39,16 +35,16 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     <Fragment>
       <h1 className='large text-primary'>Sign Up</h1>
       <p className='lead'>
-        <i className='fas fa-user'></i> Create Your Account
+        <i className='fas fa-user' /> Create Your Account
       </p>
-      <form className='form' onSubmit={(e) => onSubmit(e)}>
+      <form className='form' onSubmit={onSubmit}>
         <div className='form-group'>
           <input
             type='text'
             placeholder='Name'
             name='name'
             value={name}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
           />
         </div>
         <div className='form-group'>
@@ -57,7 +53,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             placeholder='Email Address'
             name='email'
             value={email}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
           />
           <small className='form-text'>
             This site uses Gravatar so if you want a profile image, use a
@@ -70,7 +66,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             placeholder='Password'
             name='password'
             value={password}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
           />
         </div>
         <div className='form-group'>
@@ -79,7 +75,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             placeholder='Confirm Password'
             name='password2'
             value={password2}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
           />
         </div>
         <input type='submit' className='btn btn-primary' value='Register' />

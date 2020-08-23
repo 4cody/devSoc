@@ -1,4 +1,5 @@
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../utils/api';
 import { setAlert } from './alert';
 import {
   REGISTER_SUCCESS,
@@ -8,19 +9,19 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_PROFILE,
 } from './types';
-import setAuthToken from '../utils/setAuthToken';
 
 // Load User
 export const loadUser = () => async (dispatch) => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
-
   try {
-    const res = await axios.get('/api/auth');
-
+    // const config = {
+    //   headers: {
+    //     'x-auth-token': localStorage.getItem('token'),
+    //   },
+    // };
+    // console.log(localStorage.getItem('token'));
+    // console.log('inside load user try block');
+    const res = await api.get('/auth');
     dispatch({
       type: USER_LOADED,
       payload: res.data,
@@ -33,23 +34,14 @@ export const loadUser = () => async (dispatch) => {
 };
 
 // Register User
-export const register = ({ name, email, password }) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  const body = JSON.stringify({ name, email, password });
-
+export const register = (formData) => async (dispatch) => {
   try {
-    const res = await axios.post('/api/users', body, config);
+    const res = await api.post('/users', formData);
 
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data,
     });
-
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
@@ -66,24 +58,20 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 
 // Login User
 export const login = (email, password) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  const body = JSON.stringify({ email, password });
+  const body = { email, password };
 
   try {
-    const res = await axios.post('/api/auth', body, config);
-
+    const res = await api.post('/auth', body);
+    // console.log(res.data, 'this is int he login user try blic');
+    // localStorage.setItem('token', res.data.token);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
     });
-
     dispatch(loadUser());
   } catch (err) {
+    // console.log(err);
+
     const errors = err.response.data.errors;
 
     if (errors) {
@@ -96,8 +84,5 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-// Logout / Clear Profile
-export const logout = () => (dispatch) => {
-  dispatch({ type: CLEAR_PROFILE });
-  dispatch({ type: LOGOUT });
-};
+// Logout
+export const logout = () => ({ type: LOGOUT });
