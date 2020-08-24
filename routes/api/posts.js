@@ -26,7 +26,7 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id,
+        user: req.user.id
       });
 
       const post = await newPost.save();
@@ -58,9 +58,9 @@ router.get('/', auth, async (req, res) => {
 router.get('/:id', [auth, checkObjectId('id')], async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-
+    
     if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
+      return res.status(404).json({ msg: 'Post not found' })
     }
 
     res.json(post);
@@ -105,7 +105,7 @@ router.put('/like/:id', [auth, checkObjectId('id')], async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
-    if (post.likes.some((like) => like.user.toString() === req.user.id)) {
+    if (post.likes.some(like => like.user.toString() === req.user.id)) {
       return res.status(400).json({ msg: 'Post already liked' });
     }
 
@@ -128,7 +128,7 @@ router.put('/unlike/:id', [auth, checkObjectId('id')], async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Check if the post has not yet been liked
-    if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
+    if (!post.likes.some(like => like.user.toString() === req.user.id)) {
       return res.status(400).json({ msg: 'Post has not yet been liked' });
     }
 
@@ -154,7 +154,7 @@ router.post(
   [
     auth,
     checkObjectId('id'),
-    [check('text', 'Text is required').not().isEmpty()],
+    [check('text', 'Text is required').not().isEmpty()]
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -170,7 +170,7 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id,
+        user: req.user.id
       };
 
       post.comments.unshift(newComment);
@@ -194,7 +194,7 @@ router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
 
     // Pull out comment
     const comment = post.comments.find(
-      (comment) => comment.id === req.params.comment_id
+      comment => comment.id === req.params.comment_id
     );
     // Make sure comment exists
     if (!comment) {

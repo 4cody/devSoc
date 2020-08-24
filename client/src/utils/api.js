@@ -5,9 +5,8 @@ import { LOGOUT } from '../actions/types';
 const api = axios.create({
   baseURL: '/api',
   headers: {
-    'Content-Type': 'application/json',
-    'x-auth-token': localStorage.getItem('token'),
-  },
+    'Content-Type': 'application/json'
+  }
 });
 /**
  intercept any error responses from the api
@@ -17,11 +16,8 @@ const api = axios.create({
 **/
 
 api.interceptors.response.use(
-  (res) => {
-    console.log(res);
-    return res;
-  },
-  (err) => {
+  res => res,
+  err => {
     if (err.response.data.msg === 'Token is not valid') {
       store.dispatch({ type: LOGOUT });
     }
